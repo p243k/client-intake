@@ -1,0 +1,83 @@
+<form class="space-y-6" [formGroup]="group" (ngSubmit)="submit()">
+    <div>
+      <h2 class="text-xl font-semibold">Profil client</h2>
+      <p class="text-sm text-slate-500">On récupère les infos essentielles.</p>
+    </div>
+  
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div>
+        <label class="text-sm font-medium">Prénom</label>
+        <input class="mt-1 w-full rounded-xl border px-3 py-2"
+               formControlName="firstName" type="text" />
+        <p class="mt-1 text-xs text-red-600" *ngIf="group.get('firstName')?.touched && group.get('firstName')?.invalid">
+          Champ requis
+        </p>
+      </div>
+  
+      <div>
+        <label class="text-sm font-medium">Nom</label>
+        <input class="mt-1 w-full rounded-xl border px-3 py-2"
+               formControlName="lastName" type="text" />
+        <p class="mt-1 text-xs text-red-600" *ngIf="group.get('lastName')?.touched && group.get('lastName')?.invalid">
+          Champ requis
+        </p>
+      </div>
+  
+      <div class="sm:col-span-2">
+        <label class="text-sm font-medium">Entreprise</label>
+        <input class="mt-1 w-full rounded-xl border px-3 py-2"
+               formControlName="company" type="text" />
+      </div>
+  
+      <div class="sm:col-span-2">
+        <label class="text-sm font-medium">Secteur d’activité</label>
+        <input class="mt-1 w-full rounded-xl border px-3 py-2"
+               formControlName="sector" type="text" />
+      </div>
+  
+      <div>
+        <label class="text-sm font-medium">Email</label>
+        <input class="mt-1 w-full rounded-xl border px-3 py-2"
+               formControlName="email" type="email" />
+        <p class="mt-1 text-xs text-red-600" *ngIf="group.get('email')?.touched && group.get('email')?.invalid">
+          Email invalide
+        </p>
+      </div>
+  
+      <div>
+        <label class="text-sm font-medium">Téléphone</label>
+        <input class="mt-1 w-full rounded-xl border px-3 py-2"
+               formControlName="phone" type="tel" />
+      </div>
+    </div>
+  
+    <div class="rounded-xl border bg-slate-50 p-4 space-y-3">
+      <p class="text-sm font-medium">As-tu déjà un site web ?</p>
+  
+      <div class="flex gap-4 text-sm">
+        <label class="inline-flex items-center gap-2">
+          <input type="radio" class="accent-slate-900" [value]="true" formControlName="hasWebsite" />
+          Oui
+        </label>
+        <label class="inline-flex items-center gap-2">
+          <input type="radio" class="accent-slate-900" [value]="false" formControlName="hasWebsite" />
+          Non
+        </label>
+      </div>
+  
+      <div *ngIf="group.get('hasWebsite')?.value === true">
+        <label class="text-sm font-medium">URL du site actuel</label>
+        <input class="mt-1 w-full rounded-xl border px-3 py-2"
+               formControlName="websiteUrl" type="url" placeholder="https://..." />
+      </div>
+    </div>
+  
+    <div class="flex items-center justify-end">
+      <button
+        type="submit"
+        class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-white text-sm font-medium hover:bg-slate-800"
+      >
+        Continuer →
+      </button>
+    </div>
+  </form>  

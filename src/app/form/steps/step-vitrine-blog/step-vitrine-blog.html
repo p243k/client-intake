@@ -1,0 +1,120 @@
+<form class="space-y-6" [formGroup]="group" (ngSubmit)="submit()">
+    <div>
+      <h2 class="text-xl font-semibold">Détails vitrine / blog</h2>
+      <p class="text-sm text-slate-500">On ne pose que les questions nécessaires.</p>
+    </div>
+  
+    <!-- Blog -->
+    <div class="rounded-xl border p-4 space-y-3">
+      <p class="text-sm font-medium">As-tu besoin d’un blog d’articles ?</p>
+  
+      <div class="flex gap-4 text-sm">
+        <label class="inline-flex items-center gap-2">
+          <input type="radio" class="accent-slate-900" [value]="true" formControlName="needsBlog" />
+          Oui
+        </label>
+        <label class="inline-flex items-center gap-2">
+          <input type="radio" class="accent-slate-900" [value]="false" formControlName="needsBlog" />
+          Non
+        </label>
+      </div>
+  
+      <div *ngIf="group.get('needsBlog')?.value === true" class="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label class="text-sm font-medium">Fréquence de publication</label>
+          <select class="mt-1 w-full rounded-xl border px-3 py-2" formControlName="blogFrequency">
+            <option value="">— Choisir —</option>
+            <option value="hebdo">1 / semaine</option>
+            <option value="bihebdo">2 / semaine</option>
+            <option value="mensuel">1 / mois</option>
+            <option value="occasionnel">Occasionnel</option>
+          </select>
+          <p class="mt-1 text-xs text-red-600"
+             *ngIf="group.get('blogFrequency')?.touched && group.get('blogFrequency')?.invalid">
+            Champ requis
+          </p>
+        </div>
+  
+        <div class="sm:col-span-2">
+          <label class="text-sm font-medium">Grandes catégories (séparées par virgules)</label>
+          <textarea class="mt-1 w-full rounded-xl border px-3 py-2 min-h-[90px]"
+                    formControlName="blogCategories"
+                    placeholder="Ex: Actualités, Conseils, Études de cas"></textarea>
+          <p class="mt-1 text-xs text-red-600"
+             *ngIf="group.get('blogCategories')?.touched && group.get('blogCategories')?.invalid">
+            Champ requis
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- RDV -->
+    <div class="rounded-xl border p-4 space-y-3">
+      <p class="text-sm font-medium">Souhaites-tu un système de prise de rendez-vous en ligne ?</p>
+  
+      <div class="flex gap-4 text-sm">
+        <label class="inline-flex items-center gap-2">
+          <input type="radio" class="accent-slate-900" [value]="true" formControlName="needsBooking" />
+          Oui
+        </label>
+        <label class="inline-flex items-center gap-2">
+          <input type="radio" class="accent-slate-900" [value]="false" formControlName="needsBooking" />
+          Non
+        </label>
+      </div>
+  
+      <div *ngIf="group.get('needsBooking')?.value === true" class="grid gap-4 sm:grid-cols-2">
+        <div class="sm:col-span-2">
+          <label class="text-sm font-medium">Outil souhaité</label>
+          <input class="mt-1 w-full rounded-xl border px-3 py-2"
+                 formControlName="bookingTool"
+                 placeholder="Ex: Calendly, Google Calendar, autre..." />
+          <p class="mt-1 text-xs text-red-600"
+             *ngIf="group.get('bookingTool')?.touched && group.get('bookingTool')?.invalid">
+            Champ requis
+          </p>
+        </div>
+  
+        <div class="sm:col-span-2">
+          <p class="text-sm font-medium">Connexion à un agenda ?</p>
+          <div class="flex gap-4 text-sm">
+            <label class="inline-flex items-center gap-2">
+              <input type="radio" class="accent-slate-900" [value]="true" formControlName="connectAgenda" />
+              Oui
+            </label>
+            <label class="inline-flex items-center gap-2">
+              <input type="radio" class="accent-slate-900" [value]="false" formControlName="connectAgenda" />
+              Non
+            </label>
+          </div>
+        </div>
+  
+        <div *ngIf="group.get('connectAgenda')?.value === true" class="sm:col-span-2">
+          <label class="text-sm font-medium">Quel agenda ?</label>
+          <select class="mt-1 w-full rounded-xl border px-3 py-2" formControlName="agendaType">
+            <option value="">— Choisir —</option>
+            <option value="google">Google Calendar</option>
+            <option value="outlook">Outlook</option>
+            <option value="ical">iCal / autre</option>
+          </select>
+          <p class="mt-1 text-xs text-red-600"
+             *ngIf="group.get('agendaType')?.touched && group.get('agendaType')?.invalid">
+            Champ requis
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="flex items-center justify-between">
+      <button type="button"
+        class="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+        (click)="back.emit()">
+        ← Retour
+      </button>
+  
+      <button type="submit"
+        class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+        Continuer →
+      </button>
+    </div>
+  </form>  

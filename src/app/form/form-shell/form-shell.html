@@ -1,0 +1,83 @@
+    <div class="min-h-screen">
+    <header class="border-b bg-white">
+        <div class="mx-auto max-w-3xl px-4 py-4 flex items-center justify-between">
+        <div>
+            <h1 class="text-lg font-semibold">Brief client — Formulaire interne</h1>
+            <p class="text-sm text-slate-500">Pour comprendre votre besoin au mieux</p>
+        </div>
+        <div *ngIf="current !== 'done'" class="text-sm text-slate-600">
+            Étape {{ currentIndex + 1 }} / {{ steps.length }}
+        </div>
+        </div>
+    </header>
+
+    <main class="mx-auto max-w-3xl px-4 py-8">
+        <!-- Progress -->
+        <div *ngIf="current !== 'done'" class="mb-6">
+        <div class="flex items-center justify-between text-xs text-slate-500 mb-2">
+            <span>{{ steps[currentIndex].label }}</span>
+            <span>{{ progressPercent }}%</span>
+        </div>
+        <div class="h-2 w-full rounded-full bg-slate-200 overflow-hidden">
+            <div
+            class="h-2 rounded-full bg-slate-900 transition-all"
+            [style.width.%]="progressPercent"
+            ></div>
+        </div>
+        </div>
+
+        <!-- Card -->
+        <div class="rounded-2xl bg-white shadow-sm border p-6">
+        <app-step-profile
+            *ngIf="current === 'profile'"
+            (next)="goNext()"
+        ></app-step-profile>
+
+        <app-step-project-type
+            *ngIf="current === 'projectType'"
+            (back)="goBack()"
+            (next)="goNext()"
+        ></app-step-project-type>
+
+        <app-step-content
+            *ngIf="current === 'content'"
+            (back)="goBack()"
+            (next)="goNext()"
+        ></app-step-content>
+
+        <app-step-design
+            *ngIf="current === 'design'"
+            (back)="goBack()"
+            (next)="goNext()"
+        ></app-step-design>
+
+        <app-step-budget
+            *ngIf="current === 'budget'"
+            (back)="goBack()"
+            (next)="goNext()"
+        ></app-step-budget>
+
+        <app-step-recap
+        *ngIf="current === 'recap'"
+        (back)="goBack()"
+        (done)="current = 'done'"
+        ></app-step-recap>
+
+        <app-step-done *ngIf="current === 'done'"></app-step-done>
+
+
+        <app-step-vitrine-blog
+        *ngIf="current === 'vitrineBlog'"
+        (back)="goBack()"
+        (next)="goNext()"
+        ></app-step-vitrine-blog>
+
+        <app-step-ecommerce
+        *ngIf="current === 'ecommerce'"
+        (back)="goBack()"
+        (next)="goNext()"
+        ></app-step-ecommerce>
+
+        </div>
+    </main>
+    </div>  

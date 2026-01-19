@@ -1,0 +1,51 @@
+<div class="space-y-6">
+    <div>
+      <h2 class="text-xl font-semibold">Récapitulatif & message final</h2>
+      <p class="text-sm text-slate-500">
+        Ce récapitulatif correspond au cahier des charges issu de tes réponses.
+      </p>
+    </div>
+  
+    <!-- Message libre -->
+    <form [formGroup]="recapGroup" class="space-y-4">
+      <div>
+        <label class="text-sm font-medium">
+          Y a-t-il autre chose que tu souhaites préciser ?
+        </label>
+        <textarea
+          class="mt-1 w-full rounded-xl border px-3 py-2 min-h-[100px]"
+          formControlName="additionalNotes"
+          placeholder="Contraintes, idées, contexte particulier…"
+        ></textarea>
+      </div>
+  
+      <label class="inline-flex items-center gap-2 text-sm">
+        <input type="checkbox" class="accent-slate-900" formControlName="wantsCallback" />
+        Je souhaite être rappelé pour en parler de vive voix
+      </label>
+    </form>
+  
+    <!-- Récap structuré -->
+    <div class="rounded-xl border bg-slate-50 p-4 space-y-3">
+        <p *ngIf="errorMsg" class="text-sm text-red-600">{{ errorMsg }}</p>
+
+  <div class="flex items-center justify-between">
+    <button type="button"
+      class="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+      (click)="back.emit()">
+      ← Retour
+    </button>
+
+    <div class="flex items-center gap-3">
+
+      <button
+        type="button"
+        class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-60"
+        [disabled]="sending"
+        (click)="validateAndSend()"
+      >
+        {{ sending ? 'Envoi en cours…' : 'Valider et envoyer' }}
+      </button>
+    </div>
+  </div>
+</div>

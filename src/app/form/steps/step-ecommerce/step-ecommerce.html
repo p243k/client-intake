@@ -1,0 +1,106 @@
+<form class="space-y-6" [formGroup]="group" (ngSubmit)="submit()">
+    <div>
+      <h2 class="text-xl font-semibold">Détails e-commerce</h2>
+      <p class="text-sm text-slate-500">Questions produits, paiement, livraison.</p>
+    </div>
+  
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div class="sm:col-span-2">
+        <label class="text-sm font-medium">Nombre approximatif de produits</label>
+        <select class="mt-1 w-full rounded-xl border px-3 py-2" formControlName="productCount">
+          <option value="">— Choisir —</option>
+          <option value="0-10">0–10</option>
+          <option value="10-50">10–50</option>
+          <option value="50+">50+</option>
+        </select>
+        <p class="mt-1 text-xs text-red-600"
+           *ngIf="group.get('productCount')?.touched && group.get('productCount')?.invalid">
+          Champ requis
+        </p>
+      </div>
+  
+      <div class="sm:col-span-2 rounded-xl border p-4 space-y-3">
+        <p class="text-sm font-medium">Veux-tu gérer le stock toi-même ?</p>
+        <div class="flex gap-4 text-sm">
+          <label class="inline-flex items-center gap-2">
+            <input type="radio" class="accent-slate-900" [value]="true" formControlName="manageStock" />
+            Oui
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input type="radio" class="accent-slate-900" [value]="false" formControlName="manageStock" />
+            Non
+          </label>
+        </div>
+      </div>
+  
+      <div class="sm:col-span-2 rounded-xl border p-4 space-y-3" [formGroup]="payments">
+        <p class="text-sm font-medium">Moyens de paiement souhaités</p>
+  
+        <div class="grid gap-2 sm:grid-cols-2 text-sm">
+          <label class="inline-flex items-center gap-2">
+            <input type="checkbox" class="accent-slate-900" formControlName="cb" />
+            CB
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input type="checkbox" class="accent-slate-900" formControlName="paypal" />
+            PayPal
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input type="checkbox" class="accent-slate-900" formControlName="stripe" />
+            Stripe
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input type="checkbox" class="accent-slate-900" formControlName="other" />
+            Autre
+          </label>
+        </div>
+  
+        <div *ngIf="payments.get('other')?.value === true">
+          <label class="text-sm font-medium">Précise l’autre moyen</label>
+          <input class="mt-1 w-full rounded-xl border px-3 py-2" formControlName="otherLabel" />
+          <p class="mt-1 text-xs text-red-600"
+             *ngIf="payments.get('otherLabel')?.touched && payments.get('otherLabel')?.invalid">
+            Champ requis
+          </p>
+        </div>
+      </div>
+  
+      <div class="sm:col-span-2 rounded-xl border p-4 space-y-3">
+        <p class="text-sm font-medium">Livres-tu seulement en France ?</p>
+        <div class="flex gap-4 text-sm">
+          <label class="inline-flex items-center gap-2">
+            <input type="radio" class="accent-slate-900" [value]="true" formControlName="shipsFranceOnly" />
+            Oui
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input type="radio" class="accent-slate-900" [value]="false" formControlName="shipsFranceOnly" />
+            Non
+          </label>
+        </div>
+  
+        <div *ngIf="group.get('shipsFranceOnly')?.value === false">
+          <label class="text-sm font-medium">Quels pays ?</label>
+          <textarea class="mt-1 w-full rounded-xl border px-3 py-2 min-h-[90px]"
+                    formControlName="countries"
+                    placeholder="Ex: Belgique, Suisse, Luxembourg..."></textarea>
+          <p class="mt-1 text-xs text-red-600"
+             *ngIf="group.get('countries')?.touched && group.get('countries')?.invalid">
+            Champ requis
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="flex items-center justify-between">
+      <button type="button"
+        class="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+        (click)="back.emit()">
+        ← Retour
+      </button>
+  
+      <button type="submit"
+        class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+        Continuer →
+      </button>
+    </div>
+  </form>  

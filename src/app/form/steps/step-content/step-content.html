@@ -1,0 +1,110 @@
+<form class="space-y-6" [formGroup]="group" (ngSubmit)="submit()">
+    <div>
+      <h2 class="text-xl font-semibold">Contenus</h2>
+      <p class="text-sm text-slate-500">
+        Textes, images, logo… on adapte les questions selon ce que tu as déjà.
+      </p>
+    </div>
+  
+    <div class="rounded-xl border p-4 space-y-3">
+      <p class="text-sm font-medium">As-tu déjà tous les contenus (textes, images, logo) ?</p>
+  
+      <div class="grid gap-3 sm:grid-cols-3 text-sm">
+        <label class="flex items-center gap-2 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="oui" formControlName="hasContent" />
+          Oui
+        </label>
+  
+        <label class="flex items-center gap-2 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="partiellement" formControlName="hasContent" />
+          Partiellement
+        </label>
+  
+        <label class="flex items-center gap-2 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="non" formControlName="hasContent" />
+          Non, pas du tout
+        </label>
+      </div>
+  
+      <p class="mt-1 text-xs text-red-600"
+         *ngIf="group.get('hasContent')?.touched && group.get('hasContent')?.invalid">
+        Champ requis
+      </p>
+    </div>
+  
+    <!-- Si OUI -->
+    <div *ngIf="group.get('hasContent')?.value === 'oui'" class="rounded-xl border p-4 space-y-3">
+      <p class="text-sm font-medium">Comment souhaites-tu nous les envoyer ?</p>
+  
+      <select class="mt-1 w-full rounded-xl border px-3 py-2" formControlName="sendMethod">
+        <option value="">— Choisir —</option>
+        <option value="drive">Google Drive / Dropbox</option>
+        <option value="email">Par email</option>
+        <option value="notion">Lien Notion / doc</option>
+        <option value="autre">Autre (à préciser dans le récap)</option>
+      </select>
+  
+      <p class="mt-1 text-xs text-red-600"
+         *ngIf="group.get('sendMethod')?.touched && group.get('sendMethod')?.invalid">
+        Champ requis
+      </p>
+  
+      <div class="rounded-xl bg-slate-50 p-3 text-sm text-slate-600">
+        Astuce : un dossier Drive avec sous-dossiers “Textes / Images / Logo” fait gagner beaucoup de temps.
+      </div>
+    </div>
+  
+    <!-- Si NON / PARTIELLEMENT -->
+    <div *ngIf="group.get('hasContent')?.value === 'partiellement' || group.get('hasContent')?.value === 'non'"
+         class="rounded-xl border p-4 space-y-4">
+  
+      <div>
+        <p class="text-sm font-medium">As-tu besoin d’aide pour rédiger les textes ?</p>
+        <div class="flex gap-4 text-sm mt-2">
+          <label class="inline-flex items-center gap-2">
+            <input type="radio" class="accent-slate-900" [value]="true" formControlName="needsCopywriting" />
+            Oui
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input type="radio" class="accent-slate-900" [value]="false" formControlName="needsCopywriting" />
+            Non
+          </label>
+        </div>
+        <p class="mt-1 text-xs text-red-600"
+           *ngIf="group.get('needsCopywriting')?.touched && group.get('needsCopywriting')?.invalid">
+          Champ requis
+        </p>
+      </div>
+  
+      <div>
+        <p class="text-sm font-medium">Souhaites-tu qu’on t’aide pour les images / visuels ?</p>
+        <div class="flex gap-4 text-sm mt-2">
+          <label class="inline-flex items-center gap-2">
+            <input type="radio" class="accent-slate-900" [value]="true" formControlName="needsVisualHelp" />
+            Oui
+          </label>
+          <label class="inline-flex items-center gap-2">
+            <input type="radio" class="accent-slate-900" [value]="false" formControlName="needsVisualHelp" />
+            Non
+          </label>
+        </div>
+        <p class="mt-1 text-xs text-red-600"
+           *ngIf="group.get('needsVisualHelp')?.touched && group.get('needsVisualHelp')?.invalid">
+          Champ requis
+        </p>
+      </div>
+    </div>
+  
+    <div class="flex items-center justify-between">
+      <button type="button"
+        class="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+        (click)="back.emit()">
+        ← Retour
+      </button>
+  
+      <button type="submit"
+        class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+        Continuer →
+      </button>
+    </div>
+  </form>  

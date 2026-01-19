@@ -1,0 +1,109 @@
+<form class="space-y-6" [formGroup]="group" (ngSubmit)="submit()">
+    <div>
+      <h2 class="text-xl font-semibold">Budget & délais</h2>
+      <p class="text-sm text-slate-500">
+        Ces infos nous aident à cadrer rapidement la faisabilité et le planning.
+      </p>
+    </div>
+  
+    <!-- Budget -->
+    <div class="rounded-xl border p-4 space-y-3">
+      <p class="text-sm font-medium">As-tu une idée du budget ?</p>
+  
+      <div class="grid gap-3 sm:grid-cols-2 text-sm">
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="lt1000" formControlName="range" />
+          <div>
+            <div class="font-medium">Moins de 1 000 €</div>
+            <div class="text-xs text-slate-500">Petit budget</div>
+          </div>
+        </label>
+  
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="1000-2500" formControlName="range" />
+          <div>
+            <div class="font-medium">1 000 – 2 500 €</div>
+            <div class="text-xs text-slate-500">Vitrine / simple</div>
+          </div>
+        </label>
+  
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="2500-5000" formControlName="range" />
+          <div>
+            <div class="font-medium">2 500 – 5 000 €</div>
+            <div class="text-xs text-slate-500">Projet plus complet</div>
+          </div>
+        </label>
+  
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="gt5000" formControlName="range" />
+          <div>
+            <div class="font-medium">Plus de 5 000 €</div>
+            <div class="text-xs text-slate-500">E-commerce / sur-mesure</div>
+          </div>
+        </label>
+      </div>
+  
+      <p class="mt-1 text-xs text-red-600"
+         *ngIf="group.get('range')?.touched && group.get('range')?.invalid">
+        Champ requis
+      </p>
+    </div>
+  
+    <!-- Délais -->
+    <div class="rounded-xl border p-4 space-y-3">
+      <p class="text-sm font-medium">Quel est ton délai idéal ?</p>
+  
+      <div class="grid gap-3 sm:grid-cols-2 text-sm">
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="asap" formControlName="timeline" />
+          <div>
+            <div class="font-medium">ASAP</div>
+            <div class="text-xs text-slate-500">Le plus vite possible</div>
+          </div>
+        </label>
+  
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="1-2m" formControlName="timeline" />
+          <div>
+            <div class="font-medium">1 – 2 mois</div>
+            <div class="text-xs text-slate-500">Planning court</div>
+          </div>
+        </label>
+  
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="3-4m" formControlName="timeline" />
+          <div>
+            <div class="font-medium">3 – 4 mois</div>
+            <div class="text-xs text-slate-500">Planning confortable</div>
+          </div>
+        </label>
+  
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="no-deadline" formControlName="timeline" />
+          <div>
+            <div class="font-medium">Pas de délai précis</div>
+            <div class="text-xs text-slate-500">Flexible</div>
+          </div>
+        </label>
+      </div>
+  
+      <p class="mt-1 text-xs text-red-600"
+         *ngIf="group.get('timeline')?.touched && group.get('timeline')?.invalid">
+        Champ requis
+      </p>
+    </div>
+  
+    <div class="flex items-center justify-between">
+      <button type="button"
+        class="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+        (click)="back.emit()">
+        ← Retour
+      </button>
+  
+      <button type="submit"
+        class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+        Continuer →
+      </button>
+    </div>
+</form>  
