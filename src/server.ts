@@ -112,7 +112,7 @@ function buildBriefHtml(payload: any, submissionId: string) {
 <body>
   <div class="row" style="justify-content:space-between; align-items:flex-start;">
     <div>
-      <p class="h1">Cahier des charges — version préliminaire</p>
+      <p class="h1">Cahier des charges v1 - Interne</p>
       <p class="muted small" style="margin:6px 0 0;">
         ${escapeHtml(brand)} · Soumission ${escapeHtml(submissionId.slice(0,8))}
       </p>
@@ -231,6 +231,7 @@ function buildBriefHtml(payload: any, submissionId: string) {
 async function renderPdf(html: string): Promise<Buffer> {
   const browser = await puppeteer.launch({
     headless: true,
+    executablePath: process.env['PUPPETEER_EXECUTABLE_PATH'],
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 
@@ -288,7 +289,7 @@ app.post('/api/brief/submit', requireApiKey, async (req: any, res: any) => {
       from,
       to,
       subject,
-      text: `Bonjour MERAKI, \n\nVous trouverez en pièce les informations et les demandes d'un client potentiel.\n\n\nCordialement, \nEquipe Interne - MERAKI.`,
+      text: `Bonjour MERAKI, \n\nVous trouverez en pièce jointe les informations et les demandes d'un client potentiel.\n\n\nCordialement, \nEquipe Interne - MERAKI.`,
       replyTo: c.email || undefined,
       attachments: [
         {
