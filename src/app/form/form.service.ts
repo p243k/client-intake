@@ -381,4 +381,12 @@ export class FormService {
   clearDraft() {
     localStorage.removeItem(DRAFT_KEY);
   }
+
+  resetAll() {
+    // Vide le formulaire en mémoire
+    this.form.reset();
+
+    // Supprime la sauvegarde "reprendre plus tard"
+    this.clearDraft();
+  }
 }

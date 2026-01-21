@@ -241,6 +241,7 @@ export class StepRecap {
     this.submitSvc.submit(payload).subscribe({
       next: () => {
         this.sending = false;
+        this.formSvc.resetAll();
         this.done.emit();
       },
       error: () => {
