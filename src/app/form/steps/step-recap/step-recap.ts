@@ -33,107 +33,172 @@ export class StepRecap {
     const d = this.data;
     const lines: string[] = [];
   
-    lines.push('CAHIER DES CHARGES');
-    lines.push('Projet web — version préliminaire');
+    lines.push('═══════════════════════════════════════════════');
+    lines.push('        CAHIER DES CHARGES — PROJET WEB');
+    lines.push('═══════════════════════════════════════════════');
     lines.push('');
   
     /* =======================
-       1. CONTEXTE DU PROJET
+       1. QUALIFICATION DU PROSPECT
     ======================= */
-    lines.push('1. Contexte du projet');
+    lines.push('1. QUALIFICATION DU PROSPECT');
+    lines.push('─────────────────────────────────────────────');
     lines.push(
-      `Ce document synthétise les éléments communiqués par ${d.client.firstName} ${d.client.lastName}` +
-      (d.client.company ? `, représentant de l’entreprise ${d.client.company}` : '') +
-      ', dans le cadre de la définition de son projet web.'
+      `Client : ${d.client.firstName} ${d.client.lastName}` +
+      (d.client.company ? ` — ${d.client.company}` : '')
     );
-  
+    
     if (d.client.sector) {
-      lines.push(`Le projet s’inscrit dans le secteur d’activité suivant : ${d.client.sector}.`);
+      lines.push(`Secteur : ${d.client.sector}`);
     }
-  
-    lines.push(`Contact principal : ${d.client.email}` + (d.client.phone ? ` — ${d.client.phone}` : '.'));
-  
+    
+    lines.push(`Contact : ${d.client.email}${d.client.phone ? ` — ${d.client.phone}` : ''}`);
+    
     if (d.client.hasWebsite) {
       lines.push(
-        'Le client dispose déjà d’un site web existant.' +
-        (d.client.websiteUrl ? ` Celui-ci est accessible à l’adresse suivante : ${d.client.websiteUrl}.` : '')
+        'Dispose déjà d\'un site web' +
+        (d.client.websiteUrl ? ` : ${d.client.websiteUrl}` : '')
       );
     } else {
-      lines.push('Le client ne dispose pas actuellement de site web.');
+      lines.push('Aucun site web existant');
     }
   
     lines.push('');
+
+    // OBJECTIF PRINCIPAL
+    lines.push('OBJECTIF PRINCIPAL :');
+    const goalLabels: Record<string, string> = {
+      leads: 'Générer des leads / prises de rendez-vous',
+      vente: 'Vendre en ligne',
+      image: 'Renforcer l\'image de marque',
+      portfolio: 'Présenter un portfolio / activité'
+    };
+    if (d.project && d.project.goal) {
+      lines.push(`→ ${goalLabels[d.project.goal] || d.project.goal}`);
+    }
+    lines.push('');
+
+    // VISION DE SUCCÈS
+    lines.push('VISION DE SUCCÈS (critère de réussite) :');
+    if (d.project && d.project.successVision) {
+      lines.push(`"${d.project.successVision}"`);
+    } else {
+      lines.push('Non renseignée');
+    }
+    lines.push('');
+
+    // Budget (fourchettes plus serrées)
+    lines.push('BUDGET & PLANNING :');
+    const budgetLabels: Record<string, string> = {
+      '600-1000': '600 – 1 000 € (vitrine simple)',
+      '1000-1500': '1 000 – 1 500 € (vitrine personnalisée)',
+      '1500-2500': '1 500 – 2 500 € (fonctionnalités avancées)',
+      'gt2500': 'Plus de 2 500 € (e-commerce / sur-mesure)'
+    };
+    if (d.budget && d.budget.range) {
+      lines.push(`Budget : ${budgetLabels[d.budget.range] || d.budget.range}`);
+    }
+    
+    const timelineLabels: Record<string, string> = {
+      'asap': 'ASAP (urgent)',
+      '1-2m': '1-2 mois',
+      '3-4m': '3-4 mois',
+      'no-deadline': 'Pas de délai précis'
+    };
+    if (d.budget && d.budget.timeline) {
+      lines.push(`Délai : ${timelineLabels[d.budget.timeline] || d.budget.timeline}`);
+    }
+    lines.push('');
   
     /* =======================
-       2. NATURE DU PROJET
+       2. TYPE DE PROJET
     ======================= */
-    lines.push('2. Nature du projet');
+    lines.push('2. TYPE DE PROJET');
+    lines.push('─────────────────────────────────────────────');
   
     if (d.project.type === 'autre' && d.project.otherTypeLabel) {
-      lines.push(
-        `Le client a exprimé le souhait de réaliser un projet de type spécifique, décrit comme suit : ${d.project.otherTypeLabel}.`
-      );
+      lines.push(`Type spécifique : ${d.project.otherTypeLabel}`);
     } else {
-      lines.push(`Le projet concerne la réalisation d’un ${d.project.type}.`);
+      const typeLabels: Record<string, string> = {
+        vitrine: 'Site vitrine',
+        ecommerce: 'E-commerce',
+        blog: 'Blog / Média'
+      };
+      lines.push(`Type : ${typeLabels[d.project.type] || d.project.type}`);
     }
   
+    lines.push('');
+
+    // FONCTIONNALITÉS CLÉS
+    lines.push('FONCTIONNALITÉS CLÉS SOUHAITÉES :');
+    const features = d.features || {};
+    const activeFeatures: string[] = [];
+    if (features.booking) activeFeatures.push('- Prise de rendez-vous');
+    if (features.payment) activeFeatures.push('- Paiement en ligne');
+    if (features.blog) activeFeatures.push('- Blog / actualités');
+    if (features.memberArea) activeFeatures.push('- Espace membre');
+    if (features.multilingual) activeFeatures.push('- Multilingue');
+
+    if (activeFeatures.length > 0) {
+      activeFeatures.forEach(f => lines.push(f));
+    } else {
+      lines.push('Aucune fonctionnalité spécifique demandée');
+    }
     lines.push('');
   
     /* =======================
        3. PÉRIMÈTRE FONCTIONNEL
     ======================= */
-    lines.push('3. Périmètre fonctionnel');
+    lines.push('3. PÉRIMÈTRE FONCTIONNEL');
+    lines.push('─────────────────────────────────────────────');
   
     if (d.project.type === 'ecommerce') {
+      lines.push(`Catalogue : ${d.ecommerce.productCount} produits`);
       lines.push(
-        `Le projet comprend une dimension e-commerce, avec un catalogue estimé à ${d.ecommerce.productCount} produits.`
-      );
-  
-      lines.push(
-        `La gestion du stock sera ${d.ecommerce.manageStock ? 'assurée par le client.' : 'externalisée ou non gérée par le client.'}`
+        `Gestion du stock : ${d.ecommerce.manageStock ? 'Oui (par le client)' : 'Non / externalisée'}`
       );
   
       const payments: string[] = [];
       const p = d.ecommerce.payments || {};
-      if (p.cb) payments.push('carte bancaire');
+      if (p.cb) payments.push('CB');
       if (p.paypal) payments.push('PayPal');
       if (p.stripe) payments.push('Stripe');
       if (p.other && p.otherLabel) payments.push(p.otherLabel);
   
       if (payments.length) {
-        lines.push(`Les moyens de paiement envisagés sont les suivants : ${payments.join(', ')}.`);
+        lines.push(`Paiements : ${payments.join(', ')}`);
       }
   
       if (d.ecommerce.shipsFranceOnly) {
-        lines.push('La livraison est prévue uniquement sur le territoire français.');
+        lines.push('Livraison : France uniquement');
       } else {
-        lines.push('La livraison est prévue en dehors du territoire français.');
+        lines.push('Livraison : International');
         if (d.ecommerce.countries) {
-          lines.push(`Pays mentionnés : ${d.ecommerce.countries}.`);
+          lines.push(`Pays : ${d.ecommerce.countries}`);
         }
       }
     } else {
-      lines.push('Le projet porte sur un site de type vitrine / blog.');
+      lines.push('Site vitrine / blog');
   
       if (d.vitrineBlog.needsBlog) {
         lines.push(
-          `Le client souhaite intégrer un blog, avec une fréquence de publication estimée à ${d.vitrineBlog.blogFrequency}.`
+          `Blog intégré — Fréquence : ${d.vitrineBlog.blogFrequency}`
         );
-        lines.push(`Les catégories principales évoquées sont : ${d.vitrineBlog.blogCategories}.`);
+        lines.push(`Catégories : ${d.vitrineBlog.blogCategories}`);
       } else {
-        lines.push('Aucun blog n’est prévu dans le périmètre initial.');
+        lines.push('Pas de blog prévu');
       }
   
       if (d.vitrineBlog.needsBooking) {
         lines.push(
-          `Un système de prise de rendez-vous en ligne est souhaité, via l’outil suivant : ${d.vitrineBlog.bookingTool}.`
+          `Prise de RDV — Outil : ${d.vitrineBlog.bookingTool}`
         );
   
         if (d.vitrineBlog.connectAgenda) {
-          lines.push(`Une synchronisation avec un agenda (${d.vitrineBlog.agendaType}) est envisagée.`);
+          lines.push(`Sync agenda : ${d.vitrineBlog.agendaType}`);
         }
       } else {
-        lines.push('Aucun système de prise de rendez-vous n’est prévu.');
+        lines.push('Pas de système de RDV');
       }
     }
   
@@ -142,26 +207,19 @@ export class StepRecap {
     /* =======================
        4. CONTENUS
     ======================= */
-    lines.push('4. Contenus');
+    lines.push('4. CONTENUS');
+    lines.push('─────────────────────────────────────────────');
   
     if (d.content.hasContent === 'oui') {
-      lines.push(
-        `Le client indique disposer de l’ensemble des contenus nécessaires (textes, images, logo).`
-      );
-      lines.push(`Les contenus seront transmis via le canal suivant : ${d.content.sendMethod}.`);
+      lines.push('✓ Contenus disponibles (textes, images, logo)');
+      lines.push(`Envoi via : ${d.content.sendMethod}`);
     } else {
+      lines.push('✗ Contenus non disponibles');
       lines.push(
-        `Le client ne dispose pas de l’ensemble des contenus au moment de la rédaction de ce document.`
+        `Rédaction : ${d.content.needsCopywriting ? 'Aide souhaitée' : 'Non nécessaire'}`
       );
       lines.push(
-        `Un accompagnement pour la rédaction des textes est ${
-          d.content.needsCopywriting ? 'souhaité.' : 'non souhaité.'
-        }`
-      );
-      lines.push(
-        `Un accompagnement pour les visuels est ${
-          d.content.needsVisualHelp ? 'souhaité.' : 'non souhaité.'
-        }`
+        `Visuels : ${d.content.needsVisualHelp ? 'Aide souhaitée' : 'Non nécessaire'}`
       );
     }
   
@@ -170,62 +228,59 @@ export class StepRecap {
     /* =======================
        5. DESIGN & RÉFÉRENCES
     ======================= */
-    lines.push('5. Design et références');
+    lines.push('5. DESIGN & RÉFÉRENCES');
+    lines.push('─────────────────────────────────────────────');
   
     if (d.design.hasBranding) {
-      lines.push(
-        `Le client dispose déjà d’une charte graphique et/ou d’un logo. Un lien a été communiqué : ${d.design.brandingLink}.`
-      );
+      lines.push(`✓ Charte graphique disponible : ${d.design.brandingLink}`);
     } else {
-      lines.push('Le client ne dispose pas de charte graphique ou de logo à ce stade.');
+      lines.push('✗ Pas de charte graphique');
     }
   
     if (d.design.hasReferences) {
-      lines.push('Le client a communiqué les références suivantes :');
+      lines.push('');
+      lines.push('RÉFÉRENCES VISUELLES :');
   
       const refs = d.design.references || {};
       if (refs.ref1Url) {
-        lines.push(`- ${refs.ref1Url}${refs.ref1Notes ? ` — ${refs.ref1Notes}` : ''}`);
+        lines.push(`1. ${refs.ref1Url}`);
+        if (refs.ref1Notes) lines.push(`   → ${refs.ref1Notes}`);
       }
       if (refs.ref2Url) {
-        lines.push(`- ${refs.ref2Url}${refs.ref2Notes ? ` — ${refs.ref2Notes}` : ''}`);
+        lines.push(`2. ${refs.ref2Url}`);
+        if (refs.ref2Notes) lines.push(`   → ${refs.ref2Notes}`);
       }
       if (refs.ref3Url) {
-        lines.push(`- ${refs.ref3Url}${refs.ref3Notes ? ` — ${refs.ref3Notes}` : ''}`);
+        lines.push(`3. ${refs.ref3Url}`);
+        if (refs.ref3Notes) lines.push(`   → ${refs.ref3Notes}`);
       }
     } else {
-      lines.push('Aucune référence de site n’a été communiquée.');
+      lines.push('Aucune référence communiquée');
     }
   
     lines.push('');
   
     /* =======================
-       6. BUDGET & PLANNING
+       6. OBSERVATIONS
     ======================= */
-    lines.push('6. Budget et planning');
-  
-    lines.push(`Le budget envisagé par le client se situe dans la tranche suivante : ${d.budget.range}.`);
-    lines.push(`Le délai idéal évoqué pour la réalisation du projet est : ${d.budget.timeline}.`);
-  
-    lines.push('');
-  
-    /* =======================
-       7. OBSERVATIONS COMPLÉMENTAIRES
-    ======================= */
-    lines.push('7. Observations complémentaires');
+    lines.push('6. OBSERVATIONS COMPLÉMENTAIRES');
+    lines.push('─────────────────────────────────────────────');
   
     if (d.recap.additionalNotes) {
       lines.push(d.recap.additionalNotes);
     } else {
-      lines.push('Aucune observation complémentaire n’a été communiquée.');
+      lines.push('Aucune observation');
     }
   
     lines.push('');
     lines.push(
-      `Le client a indiqué ${
-        d.recap.wantsCallback ? 'souhaiter être recontacté pour échanger oralement.' : 'ne pas souhaiter de rappel téléphonique.'
-      }`
+      `Demande de rappel : ${d.recap.wantsCallback ? 'OUI' : 'NON'}`
     );
+
+    lines.push('');
+    lines.push('═══════════════════════════════════════════════');
+    lines.push('          FIN DU CAHIER DES CHARGES');
+    lines.push('═══════════════════════════════════════════════');
   
     return lines.join('\n');
   }  
@@ -246,7 +301,7 @@ export class StepRecap {
       },
       error: () => {
         this.sending = false;
-        this.errorMsg = "Impossible d’envoyer pour le moment. Vérifie que le backend /api/brief/submit est disponible.";
+        this.errorMsg = "Impossible d'envoyer pour le moment. Vérifie que le backend /api/brief/submit est disponible.";
       },
     });
   }

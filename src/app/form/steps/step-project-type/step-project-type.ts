@@ -21,6 +21,10 @@ export class StepProjectType {
     return this.formSvc.form.get('project') as FormGroup;
   }
 
+  get features(): FormGroup {
+    return this.formSvc.form.get('features') as FormGroup;
+  }
+
   private setupOtherTypeLogic() {
     const typeCtrl = this.group.get('type')!;
     const otherCtrl = this.group.get('otherTypeLabel')!;

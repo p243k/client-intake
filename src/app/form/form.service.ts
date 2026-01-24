@@ -29,6 +29,15 @@ export class FormService {
       project: this.fb.group({
         type: [null, Validators.required],
         otherTypeLabel: [''],
+        goal: [null, Validators.required],
+        successVision: ['', Validators.required],
+      }),
+      features: this.fb.group({
+        booking: [false],
+        payment: [false],
+        blog: [false],
+        memberArea: [false],
+        multilingual: [false],
       }),
       vitrineBlog: this.fb.group({
         needsBlog: [null],                 // boolean | null
@@ -73,7 +82,7 @@ export class FormService {
         }),
       }),      
       budget: this.fb.group({
-        range: [null, Validators.required],   // 'lt1000' | '1000-2500' | '2500-5000' | 'gt5000'
+        range: [null, Validators.required],   // '600-1000' | '1000-1500' | '1500-2500' | 'gt2500'
         timeline: [null, Validators.required] // 'asap' | '1-2m' | '3-4m' | 'no-deadline'
       }),
 
@@ -105,7 +114,7 @@ export class FormService {
       }
     });
 
-    // Appliquer l’état correct au chargement (draft)
+    // Appliquer l'état correct au chargement (draft)
     const current = hasWebsite.value;
     if (current === true) websiteUrl.enable({ emitEvent: false });
     else websiteUrl.disable({ emitEvent: false });
