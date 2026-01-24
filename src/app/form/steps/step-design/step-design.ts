@@ -23,6 +23,10 @@ export class StepDesign {
     return this.group.get('references') as FormGroup;
   }
 
+  get project(): FormGroup {
+    return this.formSvc.form.get('project') as FormGroup;
+  }
+
   submit() {
     this.group.markAllAsTouched();
     this.refs.markAllAsTouched();

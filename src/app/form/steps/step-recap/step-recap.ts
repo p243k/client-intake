@@ -23,9 +23,11 @@ export class StepRecap {
     return this.formSvc.form.get('recap') as FormGroup;
   }
 
+  get internalGroup(): FormGroup {
+    return this.formSvc.form.get('internalMeraki') as FormGroup;
+  }
+
   get data() {
-    // IMPORTANT : on utilise value (pas getRawValue)
-    // → champs disabled exclus = cahier des charges propre
     return this.formSvc.form.value;
   }
 
@@ -66,97 +68,136 @@ export class StepRecap {
     lines.push('');
 
     // OBJECTIF PRINCIPAL
-    lines.push('OBJECTIF PRINCIPAL :');
-    const goalLabels: Record<string, string> = {
-      leads: 'Générer des leads / prises de rendez-vous',
-      vente: 'Vendre en ligne',
-      image: 'Renforcer l\'image de marque',
-      portfolio: 'Présenter un portfolio / activité'
-    };
     if (d.project && d.project.goal) {
+      lines.push('OBJECTIF PRINCIPAL :');
+      const goalLabels: Record<string, string> = {
+        'devis-rdv': 'Obtenir des demandes de devis/rendez-vous',
+        'vente': 'Vendre en ligne',
+        'presenter-rassurer': 'Présenter l\'activité et rassurer',
+        'recruter': 'Recruter/attirer des partenaires',
+        'autre': d.project.goalOther || 'Autre objectif'
+      };
       lines.push(`→ ${goalLabels[d.project.goal] || d.project.goal}`);
+      lines.push('');
     }
-    lines.push('');
 
     // VISION DE SUCCÈS
-    lines.push('VISION DE SUCCÈS (critère de réussite) :');
     if (d.project && d.project.successVision) {
+      lines.push('VISION DE SUCCÈS (critère de réussite) :');
       lines.push(`"${d.project.successVision}"`);
-    } else {
-      lines.push('Non renseignée');
+      lines.push('');
     }
-    lines.push('');
 
-    // Budget (fourchettes plus serrées)
-    lines.push('BUDGET & PLANNING :');
-    const budgetLabels: Record<string, string> = {
-      '600-1000': '600 – 1 000 € (vitrine simple)',
-      '1000-1500': '1 000 – 1 500 € (vitrine personnalisée)',
-      '1500-2500': '1 500 – 2 500 € (fonctionnalités avancées)',
-      'gt2500': 'Plus de 2 500 € (e-commerce / sur-mesure)'
-    };
-    if (d.budget && d.budget.range) {
-      lines.push(`Budget : ${budgetLabels[d.budget.range] || d.budget.range}`);
+    // Budget
+    if (d.budget) {
+      lines.push('BUDGET & PLANNING :');
+      const budgetLabels: Record<string, string> = {
+        '400-700': '400 – 700 € (vitrine simple)',
+        '700-1000': '700 – 1 000 € (vitrine personnalisée)',
+        '1000-1500': '1 000 – 1 500 € (site complet)',
+        '1500-2500': '1 500 – 2 500 € (fonctionnalités avancées)',
+        'gt2500': 'Plus de 2 500 € (projet complexe)',
+        '1500': '1 500 € (e-commerce minimum)',
+        '2500': '2 500 € (e-commerce moyen)',
+        '3500-plus': '3 500 € et plus (gros projet e-commerce)'
+      };
+      if (d.budget.range) {
+        lines.push(`Budget : ${budgetLabels[d.budget.range] || d.budget.range}`);
+      }
+      
+      const timelineLabels: Record<string, string> = {
+        'moins-1m': 'Moins d\'1 mois (urgent)',
+        '1-2m': '1-2 mois',
+        '3m-plus': '3 mois et +',
+        'no-deadline': 'Pas de date précise'
+      };
+      if (d.budget.timeline) {
+        lines.push(`Délai : ${timelineLabels[d.budget.timeline] || d.budget.timeline}`);
+      }
+      lines.push('');
     }
-    
-    const timelineLabels: Record<string, string> = {
-      'asap': 'ASAP (urgent)',
-      '1-2m': '1-2 mois',
-      '3-4m': '3-4 mois',
-      'no-deadline': 'Pas de délai précis'
-    };
-    if (d.budget && d.budget.timeline) {
-      lines.push(`Délai : ${timelineLabels[d.budget.timeline] || d.budget.timeline}`);
-    }
-    lines.push('');
   
     /* =======================
-       2. TYPE DE PROJET
+       2. TYPE DE PROJET & FONCTIONNALITÉS
     ======================= */
-    lines.push('2. TYPE DE PROJET');
+    lines.push('2. TYPE DE PROJET & FONCTIONNALITÉS');
     lines.push('─────────────────────────────────────────────');
   
-    if (d.project.type === 'autre' && d.project.otherTypeLabel) {
-      lines.push(`Type spécifique : ${d.project.otherTypeLabel}`);
-    } else {
-      const typeLabels: Record<string, string> = {
-        vitrine: 'Site vitrine',
-        ecommerce: 'E-commerce',
-        blog: 'Blog / Média'
+    if (d.project && d.project.type) {
+      if (d.project.type === 'autre' && d.project.otherTypeLabel) {
+        lines.push(`Type spécifique : ${d.project.otherTypeLabel}`);
+      } else {
+        const typeLabels: Record<string, string> = {
+          vitrine: 'Site vitrine',
+          ecommerce: 'E-commerce',
+          blog: 'Blog / Média'
+        };
+        lines.push(`Type : ${typeLabels[d.project.type] || d.project.type}`);
+      }
+    }
+
+    // Style global
+    if (d.project && d.project.stylePreference) {
+      const styleLabels: Record<string, string> = {
+        sobre: 'Sobre / Minimaliste',
+        dynamique: 'Dynamique / Coloré',
+        corporate: 'Corporate / Sérieux',
+        creatif: 'Créatif / Original'
       };
-      lines.push(`Type : ${typeLabels[d.project.type] || d.project.type}`);
+      lines.push(`Style souhaité : ${styleLabels[d.project.stylePreference]}`);
     }
   
     lines.push('');
 
-    // FONCTIONNALITÉS CLÉS
-    lines.push('FONCTIONNALITÉS CLÉS SOUHAITÉES :');
-    const features = d.features || {};
-    const activeFeatures: string[] = [];
-    if (features.booking) activeFeatures.push('- Prise de rendez-vous');
-    if (features.payment) activeFeatures.push('- Paiement en ligne');
-    if (features.blog) activeFeatures.push('- Blog / actualités');
-    if (features.memberArea) activeFeatures.push('- Espace membre');
-    if (features.multilingual) activeFeatures.push('- Multilingue');
+    // FONCTIONNALITÉS avec niveaux d'importance
+    if (d.features) {
+      lines.push('FONCTIONNALITÉS :');
+      
+      if (d.features.blogImportance) {
+        const blogLabels: Record<string, string> = {
+          'indispensable': '- Blog : INDISPENSABLE',
+          'interessant': '- Blog : Intéressant',
+          'pas-utile': '- Blog : Pas utile'
+        };
+        lines.push(blogLabels[d.features.blogImportance]);
+      }
 
-    if (activeFeatures.length > 0) {
-      activeFeatures.forEach(f => lines.push(f));
-    } else {
-      lines.push('Aucune fonctionnalité spécifique demandée');
+      if (d.features.bookingImportance) {
+        const bookingLabels: Record<string, string> = {
+          'indispensable': '- Prise de RDV : INDISPENSABLE',
+          'plus-tard': '- Prise de RDV : Plus tard',
+          'pas-utile': '- Prise de RDV : Pas utile'
+        };
+        lines.push(bookingLabels[d.features.bookingImportance]);
+      }
+
+      if (d.features.otherFeatures) {
+        lines.push(`- Autres : ${d.features.otherFeatures}`);
+      }
+
+      lines.push('');
     }
-    lines.push('');
   
     /* =======================
-       3. PÉRIMÈTRE FONCTIONNEL
+       3. PÉRIMÈTRE (E-COMMERCE ou VITRINE)
     ======================= */
     lines.push('3. PÉRIMÈTRE FONCTIONNEL');
     lines.push('─────────────────────────────────────────────');
   
-    if (d.project.type === 'ecommerce') {
-      lines.push(`Catalogue : ${d.ecommerce.productCount} produits`);
-      lines.push(
-        `Gestion du stock : ${d.ecommerce.manageStock ? 'Oui (par le client)' : 'Non / externalisée'}`
-      );
+    if (d.project && d.project.type === 'ecommerce' && d.ecommerce) {
+      // Mode de gestion
+      if (d.ecommerce.managementType) {
+        const mgmtLabels: Record<string, string> = {
+          'cle-en-main': 'Solution clé en main (Meraki gère stock & envois)',
+          'autonome': 'Gestion autonome (client gère stock & envois)',
+          'a-definir': 'Mode de gestion à définir ensemble'
+        };
+        lines.push(`Mode : ${mgmtLabels[d.ecommerce.managementType]}`);
+      }
+
+      if (d.ecommerce.productCount) {
+        lines.push(`Catalogue : ${d.ecommerce.productCount} produits`);
+      }
   
       const payments: string[] = [];
       const p = d.ecommerce.payments || {};
@@ -177,23 +218,18 @@ export class StepRecap {
           lines.push(`Pays : ${d.ecommerce.countries}`);
         }
       }
-    } else {
+    } else if (d.vitrineBlog) {
       lines.push('Site vitrine / blog');
   
       if (d.vitrineBlog.needsBlog) {
-        lines.push(
-          `Blog intégré — Fréquence : ${d.vitrineBlog.blogFrequency}`
-        );
+        lines.push(`Blog intégré — Fréquence : ${d.vitrineBlog.blogFrequency}`);
         lines.push(`Catégories : ${d.vitrineBlog.blogCategories}`);
       } else {
         lines.push('Pas de blog prévu');
       }
   
       if (d.vitrineBlog.needsBooking) {
-        lines.push(
-          `Prise de RDV — Outil : ${d.vitrineBlog.bookingTool}`
-        );
-  
+        lines.push(`Prise de RDV — Outil : ${d.vitrineBlog.bookingTool}`);
         if (d.vitrineBlog.connectAgenda) {
           lines.push(`Sync agenda : ${d.vitrineBlog.agendaType}`);
         }
@@ -209,18 +245,41 @@ export class StepRecap {
     ======================= */
     lines.push('4. CONTENUS');
     lines.push('─────────────────────────────────────────────');
-  
-    if (d.content.hasContent === 'oui') {
-      lines.push('✓ Contenus disponibles (textes, images, logo)');
-      lines.push(`Envoi via : ${d.content.sendMethod}`);
-    } else {
-      lines.push('✗ Contenus non disponibles');
-      lines.push(
-        `Rédaction : ${d.content.needsCopywriting ? 'Aide souhaitée' : 'Non nécessaire'}`
-      );
-      lines.push(
-        `Visuels : ${d.content.needsVisualHelp ? 'Aide souhaitée' : 'Non nécessaire'}`
-      );
+
+    // Pages souhaitées
+    if (d.content && d.content.pages) {
+      const selectedPages: string[] = [];
+      if (d.content.pages.accueil) selectedPages.push('Accueil');
+      if (d.content.pages.aPropos) selectedPages.push('À propos');
+      if (d.content.pages.services) selectedPages.push('Services');
+      if (d.content.pages.blog) selectedPages.push('Blog');
+      if (d.content.pages.avis) selectedPages.push('Avis clients');
+      if (d.content.pages.contact) selectedPages.push('Contact');
+      if (d.content.pages.autre) selectedPages.push(d.content.pages.autre);
+
+      if (selectedPages.length > 0) {
+        lines.push(`Pages : ${selectedPages.join(', ')}`);
+      }
+    }
+
+    // Aide rédaction
+    if (d.content && d.content.textHelp) {
+      const textLabels: Record<string, string> = {
+        'fournis-tout': 'Textes : Client fournit tout',
+        'aide-partielle': 'Textes : Aide partielle Meraki [FACTURÉ 15€/page]',
+        'redaction-complete': 'Textes : Rédaction complète Meraki [FACTURÉ 35€/page]'
+      };
+      lines.push(textLabels[d.content.textHelp]);
+    }
+
+    // Aide visuels
+    if (d.content && d.content.visualsHelp) {
+      const visualLabels: Record<string, string> = {
+        'fournis-tout': 'Visuels : Client fournit tout',
+        'sourcing': 'Visuels : Sourcing Meraki [FACTURÉ 150€]',
+        'shooting': 'Visuels : Shooting photo pro Meraki [FACTURÉ sur devis]'
+      };
+      lines.push(visualLabels[d.content.visualsHelp]);
     }
   
     lines.push('');
@@ -231,13 +290,13 @@ export class StepRecap {
     lines.push('5. DESIGN & RÉFÉRENCES');
     lines.push('─────────────────────────────────────────────');
   
-    if (d.design.hasBranding) {
-      lines.push(`✓ Charte graphique disponible : ${d.design.brandingLink}`);
+    if (d.design && d.design.hasBranding) {
+      lines.push(`Charte graphique disponible : ${d.design.brandingLink}`);
     } else {
-      lines.push('✗ Pas de charte graphique');
+      lines.push('Pas de charte graphique');
     }
   
-    if (d.design.hasReferences) {
+    if (d.design && d.design.hasReferences) {
       lines.push('');
       lines.push('RÉFÉRENCES VISUELLES :');
   
@@ -261,23 +320,64 @@ export class StepRecap {
     lines.push('');
   
     /* =======================
-       6. OBSERVATIONS
+       6. OBSERVATIONS CLIENT
     ======================= */
-    lines.push('6. OBSERVATIONS COMPLÉMENTAIRES');
+    lines.push('6. OBSERVATIONS COMPLÉMENTAIRES CLIENT');
     lines.push('─────────────────────────────────────────────');
   
-    if (d.recap.additionalNotes) {
+    if (d.recap && d.recap.additionalNotes) {
       lines.push(d.recap.additionalNotes);
     } else {
       lines.push('Aucune observation');
     }
   
     lines.push('');
-    lines.push(
-      `Demande de rappel : ${d.recap.wantsCallback ? 'OUI' : 'NON'}`
-    );
+    if (d.recap) {
+      lines.push(
+        `Demande de rappel : ${d.recap.wantsCallback ? 'OUI' : 'NON'}`
+      );
+    }
 
     lines.push('');
+
+    /* =======================
+       7. SYNTHÈSE INTERNE MERAKI
+    ======================= */
+    if (d.internalMeraki) {
+      lines.push('7. SYNTHÈSE INTERNE MERAKI');
+      lines.push('─────────────────────────────────────────────');
+
+      if (d.internalMeraki.priority) {
+        const priorityLabels: Record<string, string> = {
+          'faible': 'Priorité : FAIBLE',
+          'moyenne': 'Priorité : MOYENNE',
+          'elevee': 'Priorité : ÉLEVÉE'
+        };
+        lines.push(priorityLabels[d.internalMeraki.priority]);
+      }
+
+      if (d.internalMeraki.pack) {
+        const packLabels: Record<string, string> = {
+          'starter': 'Pack conseillé : STARTER',
+          'pro': 'Pack conseillé : PRO',
+          'sur-mesure': 'Pack conseillé : SUR-MESURE'
+        };
+        lines.push(packLabels[d.internalMeraki.pack]);
+      }
+
+      if (d.internalMeraki.estimationDays) {
+        lines.push(`Estimation : ${d.internalMeraki.estimationDays}`);
+      }
+
+      if (d.internalMeraki.internalNotes) {
+        lines.push('');
+        lines.push('NOTES INTERNES :');
+        lines.push(d.internalMeraki.internalNotes);
+      }
+
+      lines.push('');
+    }
+
     lines.push('═══════════════════════════════════════════════');
     lines.push('          FIN DU CAHIER DES CHARGES');
     lines.push('═══════════════════════════════════════════════');
@@ -290,7 +390,6 @@ export class StepRecap {
     this.sending = true;
     this.errorMsg = '';
 
-    // We intentionally submit the "clean" values (disabled controls excluded)
     const payload = this.formSvc.form.value;
 
     this.submitSvc.submit(payload).subscribe({

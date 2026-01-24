@@ -1,0 +1,80 @@
+<form class="space-y-6" [formGroup]="group" (ngSubmit)="submit()">
+    <div>
+      <h2 class="text-xl font-semibold">Périmètre fonctionnel</h2>
+      <p class="text-sm text-slate-500">
+        Quelles fonctionnalités souhaitez-vous intégrer ?
+      </p>
+    </div>
+  
+    <!-- Blog -->
+    <div class="rounded-xl border p-4 space-y-3">
+      <p class="text-sm font-medium">Blog / Actualités</p>
+  
+      <div class="grid gap-3 sm:grid-cols-3 text-sm">
+        <label class="flex items-center gap-2 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="indispensable" formControlName="blogImportance" />
+          Indispensable
+        </label>
+  
+        <label class="flex items-center gap-2 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="interessant" formControlName="blogImportance" />
+          Intéressant
+        </label>
+  
+        <label class="flex items-center gap-2 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="pas-utile" formControlName="blogImportance" />
+          Pas utile
+        </label>
+      </div>
+    </div>
+
+    <!-- Prise de RDV -->
+    <div class="rounded-xl border p-4 space-y-3">
+      <p class="text-sm font-medium">Prise de rendez-vous en ligne</p>
+  
+      <div class="grid gap-3 sm:grid-cols-3 text-sm">
+        <label class="flex items-center gap-2 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="indispensable" formControlName="bookingImportance" />
+          Indispensable
+        </label>
+  
+        <label class="flex items-center gap-2 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="plus-tard" formControlName="bookingImportance" />
+          Plus tard
+        </label>
+  
+        <label class="flex items-center gap-2 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="pas-utile" formControlName="bookingImportance" />
+          Pas utile
+        </label>
+      </div>
+    </div>
+
+    <!-- Autres fonctionnalités -->
+    <div class="rounded-xl border bg-slate-50 p-4 space-y-3">
+      <label class="text-sm font-medium">
+        Autres fonctionnalités souhaitées
+      </label>
+      <textarea
+        class="mt-1 w-full rounded-xl border bg-white px-3 py-2 min-h-[90px]"
+        formControlName="otherFeatures"
+        placeholder="Ex : espace membre, site multilingue, système d'avis clients, galerie photos, newsletter..."
+      ></textarea>
+      <p class="text-xs text-slate-500">
+        💡 Mentionnez toute fonctionnalité spécifique importante pour votre projet
+      </p>
+    </div>
+  
+    <div class="flex items-center justify-between">
+      <button type="button"
+        class="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+        (click)="back.emit()">
+        ← Retour
+      </button>
+  
+      <button type="submit"
+        class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+        Continuer →
+      </button>
+    </div>
+  </form>

@@ -4,25 +4,19 @@ import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { FormService } from '../../form.service';
 
 @Component({
-  selector: 'app-step-budget',
+  selector: 'app-step-features',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './step-budget.html',
+  templateUrl: './step-features.html',
 })
-export class StepBudget {
+export class StepFeatures {
   @Output() back = new EventEmitter<void>();
   @Output() next = new EventEmitter<void>();
 
   constructor(public formSvc: FormService) {}
 
   get group(): FormGroup {
-    return this.formSvc.form.get('budget') as FormGroup;
-  }
-
-  get isEcommerce(): boolean {
-    const projectType = this.formSvc.form.get('project.type')?.value;
-    const goal = this.formSvc.form.get('project.goal')?.value;
-    return projectType === 'ecommerce' || goal === 'vente';
+    return this.formSvc.form.get('features') as FormGroup;
   }
 
   submit() {

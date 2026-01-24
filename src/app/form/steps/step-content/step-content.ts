@@ -19,8 +19,24 @@ export class StepContent {
     return this.formSvc.form.get('content') as FormGroup;
   }
 
+  get pages(): FormGroup {
+    return this.group.get('pages') as FormGroup;
+  }
+
   submit() {
+    // Marquer tous les champs comme touchés pour afficher les erreurs
     this.group.markAllAsTouched();
-    if (this.group.valid) this.next.emit();
+    
+    // Vérifier que textHelp et visualsHelp sont remplis
+    const textHelp = this.group.get('textHelp')?.value;
+    const visualsHelp = this.group.get('visualsHelp')?.value;
+    
+    if (!textHelp || !visualsHelp) {
+      // Ne pas continuer si les champs obligatoires ne sont pas remplis
+      return;
+    }
+    
+    // Continuer si tout est valide
+    this.next.emit();
   }
 }

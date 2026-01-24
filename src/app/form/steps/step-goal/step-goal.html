@@ -1,0 +1,98 @@
+<form class="space-y-6" [formGroup]="group" (ngSubmit)="submit()">
+    <div>
+      <h2 class="text-xl font-semibold">Objectif du site</h2>
+      <p class="text-sm text-slate-500">
+        Quel est l'objectif principal de ce projet web ?
+      </p>
+    </div>
+  
+    <div class="rounded-xl border p-4 space-y-3">
+      <p class="text-sm font-medium">Quel est l'objectif principal du site ?</p>
+  
+      <div class="grid gap-3">
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="devis-rdv" formControlName="goal" />
+          <div class="text-sm">
+            Obtenir des demandes de devis/rendez-vous
+          </div>
+        </label>
+  
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="vente" formControlName="goal" />
+          <div class="text-sm">
+            Vendre en ligne
+          </div>
+        </label>
+  
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="presenter-rassurer" formControlName="goal" />
+          <div class="text-sm">
+            Présenter l'activité et rassurer
+          </div>
+        </label>
+  
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="recruter" formControlName="goal" />
+          <div class="text-sm">
+            Recruter/attirer des partenaires
+          </div>
+        </label>
+  
+        <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+          <input class="accent-slate-900" type="radio" value="autre" formControlName="goal" />
+          <div class="text-sm">
+            Autre (préciser)
+          </div>
+        </label>
+      </div>
+  
+      <p class="mt-1 text-xs text-red-600"
+         *ngIf="group.get('goal')?.touched && group.get('goal')?.invalid">
+        Champ requis
+      </p>
+
+      <div *ngIf="group.get('goal')?.value === 'autre'" class="mt-3">
+        <label class="text-sm font-medium">Précisez votre objectif</label>
+        <input class="mt-1 w-full rounded-xl border px-3 py-2"
+               type="text"
+               formControlName="goalOther"
+               placeholder="Ex : créer une communauté, éduquer mes clients..." />
+        <p class="mt-1 text-xs text-red-600"
+           *ngIf="group.get('goalOther')?.touched && group.get('goalOther')?.invalid">
+          Champ requis
+        </p>
+      </div>
+    </div>
+
+    <!-- Question stratégique -->
+    <div class="rounded-xl border bg-slate-50 p-4 space-y-3">
+      <label class="text-sm font-medium">
+        ✨ En une phrase : c'est quoi pour vous un site <span class="italic font-semibold">RÉUSSI</span> pour ce projet ?
+      </label>
+      <textarea
+        class="mt-1 w-full rounded-xl border bg-white px-3 py-2 min-h-[100px]"
+        formControlName="successVision"
+        placeholder="Ex : Un site qui me génère 5 demandes de devis par mois, ou qui double mes ventes en ligne en 6 mois..."
+      ></textarea>
+      <p class="mt-1 text-xs text-red-600"
+         *ngIf="group.get('successVision')?.touched && group.get('successVision')?.invalid">
+        Champ requis
+      </p>
+      <p class="text-xs text-slate-500">
+        💡 Cette réponse nous aide à comprendre vos attentes concrètes et à vous proposer la meilleure solution.
+      </p>
+    </div>
+  
+    <div class="flex items-center justify-between">
+      <button type="button"
+        class="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+        (click)="back.emit()">
+        ← Retour
+      </button>
+  
+      <button type="submit"
+        class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+        Continuer →
+      </button>
+    </div>
+  </form>

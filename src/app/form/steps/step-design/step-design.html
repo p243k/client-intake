@@ -1,146 +1,185 @@
 <form class="space-y-6" [formGroup]="group" (ngSubmit)="submit()">
-    <div>
-      <h2 class="text-xl font-semibold">Design / inspirations</h2>
-      <p class="text-sm text-slate-500">
-        Logo/charte + exemples de sites que tu aimes (si tu en as).
-      </p>
+  <div>
+    <h2 class="text-xl font-semibold">Design / inspirations</h2>
+    <p class="text-sm text-slate-500">
+      Logo/charte, style global et exemples de sites que vous aimez.
+    </p>
+  </div>
+
+  <!-- Style global -->
+  <div class="rounded-xl border p-4 space-y-3" [formGroup]="project">
+    <p class="text-sm font-medium">Style global souhaité</p>
+
+    <div class="grid gap-3 sm:grid-cols-2">
+      <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+        <input class="accent-slate-900" type="radio" value="sobre" formControlName="stylePreference" />
+        <div class="text-sm">
+          <div class="font-medium">Sobre / Minimaliste</div>
+          <div class="text-xs text-slate-500">Épuré, élégant, moderne</div>
+        </div>
+      </label>
+
+      <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+        <input class="accent-slate-900" type="radio" value="dynamique" formControlName="stylePreference" />
+        <div class="text-sm">
+          <div class="font-medium">Dynamique / Coloré</div>
+          <div class="text-xs text-slate-500">Vif, énergique, attractif</div>
+        </div>
+      </label>
+
+      <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+        <input class="accent-slate-900" type="radio" value="corporate" formControlName="stylePreference" />
+        <div class="text-sm">
+          <div class="font-medium">Corporate / Sérieux</div>
+          <div class="text-xs text-slate-500">Professionnel, crédible, classique</div>
+        </div>
+      </label>
+
+      <label class="flex items-center gap-3 rounded-xl border p-3 hover:bg-slate-50 cursor-pointer">
+        <input class="accent-slate-900" type="radio" value="creatif" formControlName="stylePreference" />
+        <div class="text-sm">
+          <div class="font-medium">Créatif / Original</div>
+          <div class="text-xs text-slate-500">Unique, audacieux, artistique</div>
+        </div>
+      </label>
     </div>
-  
-    <!-- Branding -->
-    <div class="rounded-xl border p-4 space-y-3">
-      <p class="text-sm font-medium">As-tu déjà une charte graphique / logo ?</p>
-  
-      <div class="flex gap-4 text-sm">
-        <label class="inline-flex items-center gap-2">
-          <input type="radio" class="accent-slate-900" [value]="true" formControlName="hasBranding" />
-          Oui
-        </label>
-        <label class="inline-flex items-center gap-2">
-          <input type="radio" class="accent-slate-900" [value]="false" formControlName="hasBranding" />
-          Non
-        </label>
-      </div>
-  
+  </div>
+
+  <!-- Branding -->
+  <div class="rounded-xl border p-4 space-y-3">
+    <p class="text-sm font-medium">As-tu déjà une charte graphique / logo ?</p>
+
+    <div class="flex gap-4 text-sm">
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" class="accent-slate-900" [value]="true" formControlName="hasBranding" />
+        Oui
+      </label>
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" class="accent-slate-900" [value]="false" formControlName="hasBranding" />
+        Non
+      </label>
+    </div>
+
+    <p class="mt-1 text-xs text-red-600"
+       *ngIf="group.get('hasBranding')?.touched && group.get('hasBranding')?.invalid">
+      Champ requis
+    </p>
+
+    <div *ngIf="group.get('hasBranding')?.value === true">
+      <label class="text-sm font-medium">Lien (Drive/Dropbox/Notion) vers la charte / logo</label>
+      <input class="mt-1 w-full rounded-xl border px-3 py-2"
+             type="url"
+             placeholder="https://..."
+             formControlName="brandingLink" />
       <p class="mt-1 text-xs text-red-600"
-         *ngIf="group.get('hasBranding')?.touched && group.get('hasBranding')?.invalid">
+         *ngIf="group.get('brandingLink')?.touched && group.get('brandingLink')?.invalid">
         Champ requis
       </p>
-  
-      <div *ngIf="group.get('hasBranding')?.value === true">
-        <label class="text-sm font-medium">Lien (Drive/Dropbox/Notion) vers la charte / logo</label>
-        <input class="mt-1 w-full rounded-xl border px-3 py-2"
-               type="url"
-               placeholder="https://..."
-               formControlName="brandingLink" />
-        <p class="mt-1 text-xs text-red-600"
-           *ngIf="group.get('brandingLink')?.touched && group.get('brandingLink')?.invalid">
-          Champ requis
-        </p>
-      </div>
-  
-      <div *ngIf="group.get('hasBranding')?.value === false" class="rounded-xl bg-slate-50 p-3 text-sm text-slate-600">
-        Pas de souci : on pourra proposer une aide design (logo, couleurs, typographies) si besoin.
-      </div>
     </div>
-  
-    <!-- References -->
-    <div class="rounded-xl border p-4 space-y-3">
-      <p class="text-sm font-medium">As-tu des sites de référence que tu aimes ?</p>
-  
-      <div class="flex gap-4 text-sm">
-        <label class="inline-flex items-center gap-2">
-          <input type="radio" class="accent-slate-900" [value]="true" formControlName="hasReferences" />
-          Oui
-        </label>
-        <label class="inline-flex items-center gap-2">
-          <input type="radio" class="accent-slate-900" [value]="false" formControlName="hasReferences" />
-          Non
-        </label>
+
+    <div *ngIf="group.get('hasBranding')?.value === false" class="rounded-xl bg-slate-50 p-3 text-sm text-slate-600">
+      Pas de souci : on pourra proposer une aide design (logo, couleurs, typographies) si besoin.
+    </div>
+  </div>
+
+  <!-- References -->
+  <div class="rounded-xl border p-4 space-y-3">
+    <p class="text-sm font-medium">As-tu des sites de référence que tu aimes ?</p>
+
+    <div class="flex gap-4 text-sm">
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" class="accent-slate-900" [value]="true" formControlName="hasReferences" />
+        Oui
+      </label>
+      <label class="inline-flex items-center gap-2">
+        <input type="radio" class="accent-slate-900" [value]="false" formControlName="hasReferences" />
+        Non
+      </label>
+    </div>
+
+    <p class="mt-1 text-xs text-red-600"
+       *ngIf="group.get('hasReferences')?.touched && group.get('hasReferences')?.invalid">
+      Champ requis
+    </p>
+
+    <div *ngIf="group.get('hasReferences')?.value === true" class="space-y-4" [formGroup]="refs">
+      <!-- Ref 1 (requis) -->
+      <div class="rounded-xl border bg-slate-50 p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <p class="text-sm font-semibold">Référence 1</p>
+          <span class="text-xs text-slate-500">URL requise</span>
+        </div>
+
+        <div>
+          <label class="text-sm font-medium">Lien du site</label>
+          <input class="mt-1 w-full rounded-xl border px-3 py-2"
+                 type="url"
+                 placeholder="https://..."
+                 formControlName="ref1Url" />
+          <p class="mt-1 text-xs text-red-600"
+             *ngIf="refs.get('ref1Url')?.touched && refs.get('ref1Url')?.invalid">
+            Champ requis
+          </p>
+        </div>
+
+        <div>
+          <label class="text-sm font-medium">Ce que tu aimes (design, ambiance, structure, fonctionnalités…)</label>
+          <textarea class="mt-1 w-full rounded-xl border px-3 py-2 min-h-[90px]"
+                    formControlName="ref1Notes"
+                    placeholder="Ex : très clair, CTA visibles, navigation simple…"></textarea>
+        </div>
       </div>
-  
-      <p class="mt-1 text-xs text-red-600"
-         *ngIf="group.get('hasReferences')?.touched && group.get('hasReferences')?.invalid">
-        Champ requis
-      </p>
-  
-      <div *ngIf="group.get('hasReferences')?.value === true" class="space-y-4" [formGroup]="refs">
-        <!-- Ref 1 (requis) -->
-        <div class="rounded-xl border bg-slate-50 p-4 space-y-3">
-          <div class="flex items-center justify-between">
-            <p class="text-sm font-semibold">Référence 1</p>
-            <span class="text-xs text-slate-500">URL requise</span>
-          </div>
-  
-          <div>
-            <label class="text-sm font-medium">Lien du site</label>
-            <input class="mt-1 w-full rounded-xl border px-3 py-2"
-                   type="url"
-                   placeholder="https://..."
-                   formControlName="ref1Url" />
-            <p class="mt-1 text-xs text-red-600"
-               *ngIf="refs.get('ref1Url')?.touched && refs.get('ref1Url')?.invalid">
-              Champ requis
-            </p>
-          </div>
-  
-          <div>
-            <label class="text-sm font-medium">Ce que tu aimes (design, ambiance, structure, fonctionnalités…)</label>
-            <textarea class="mt-1 w-full rounded-xl border px-3 py-2 min-h-[90px]"
-                      formControlName="ref1Notes"
-                      placeholder="Ex : très clair, CTA visibles, navigation simple…"></textarea>
-          </div>
+
+      <!-- Ref 2 -->
+      <div class="rounded-xl border p-4 space-y-3">
+        <p class="text-sm font-semibold">Référence 2 (optionnel)</p>
+
+        <div>
+          <label class="text-sm font-medium">Lien du site</label>
+          <input class="mt-1 w-full rounded-xl border px-3 py-2"
+                 type="url"
+                 placeholder="https://..."
+                 formControlName="ref2Url" />
         </div>
-  
-        <!-- Ref 2 -->
-        <div class="rounded-xl border p-4 space-y-3">
-          <p class="text-sm font-semibold">Référence 2 (optionnel)</p>
-  
-          <div>
-            <label class="text-sm font-medium">Lien du site</label>
-            <input class="mt-1 w-full rounded-xl border px-3 py-2"
-                   type="url"
-                   placeholder="https://..."
-                   formControlName="ref2Url" />
-          </div>
-  
-          <div>
-            <label class="text-sm font-medium">Ce que tu aimes</label>
-            <textarea class="mt-1 w-full rounded-xl border px-3 py-2 min-h-[90px]"
-                      formControlName="ref2Notes"></textarea>
-          </div>
+
+        <div>
+          <label class="text-sm font-medium">Ce que tu aimes</label>
+          <textarea class="mt-1 w-full rounded-xl border px-3 py-2 min-h-[90px]"
+                    formControlName="ref2Notes"></textarea>
         </div>
-  
-        <!-- Ref 3 -->
-        <div class="rounded-xl border p-4 space-y-3">
-          <p class="text-sm font-semibold">Référence 3 (optionnel)</p>
-  
-          <div>
-            <label class="text-sm font-medium">Lien du site</label>
-            <input class="mt-1 w-full rounded-xl border px-3 py-2"
-                   type="url"
-                   placeholder="https://..."
-                   formControlName="ref3Url" />
-          </div>
-  
-          <div>
-            <label class="text-sm font-medium">Ce que tu aimes</label>
-            <textarea class="mt-1 w-full rounded-xl border px-3 py-2 min-h-[90px]"
-                      formControlName="ref3Notes"></textarea>
-          </div>
+      </div>
+
+      <!-- Ref 3 -->
+      <div class="rounded-xl border p-4 space-y-3">
+        <p class="text-sm font-semibold">Référence 3 (optionnel)</p>
+
+        <div>
+          <label class="text-sm font-medium">Lien du site</label>
+          <input class="mt-1 w-full rounded-xl border px-3 py-2"
+                 type="url"
+                 placeholder="https://..."
+                 formControlName="ref3Url" />
+        </div>
+
+        <div>
+          <label class="text-sm font-medium">Ce que tu aimes</label>
+          <textarea class="mt-1 w-full rounded-xl border px-3 py-2 min-h-[90px]"
+                    formControlName="ref3Notes"></textarea>
         </div>
       </div>
     </div>
-  
-    <div class="flex items-center justify-between">
-      <button type="button"
-        class="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50"
-        (click)="back.emit()">
-        ← Retour
-      </button>
-  
-      <button type="submit"
-        class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
-        Continuer →
-      </button>
-    </div>
-  </form>  
+  </div>
+
+  <div class="flex items-center justify-between">
+    <button type="button"
+      class="rounded-xl border px-4 py-2 text-sm font-medium hover:bg-slate-50"
+      (click)="back.emit()">
+      ← Retour
+    </button>
+
+    <button type="submit"
+      class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+      Continuer →
+    </button>
+  </div>
+</form>
